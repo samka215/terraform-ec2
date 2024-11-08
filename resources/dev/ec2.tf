@@ -30,7 +30,7 @@ locals {
   vpc_id                        = "vpc-0e76b2c583b4ccd94"
   subnet_id                     = "subnet-0fa1220c77e6b2714"
   root_volume_size              = 10
-  instance_count                = 4
+  instance_count                = 1
   enable_termination_protection = false
   ec2_instance_key_name         = "s7-key"
 
