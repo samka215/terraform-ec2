@@ -30,13 +30,13 @@ locals {
   vpc_id                        = "vpc-0e76b2c583b4ccd94"
   subnet_id                     = "subnet-0fa1220c77e6b2714"
   root_volume_size              = 10
-  instance_count                = 2
+  instance_count                = 1
   enable_termination_protection = false
   ec2_instance_key_name         = "s7-key"
 
   tags = {
-    Name       =  "samka"
-    Env        = "prod"
+    Name       = "samka"
+    Env        = "dev"
     Project    = "anaconda"
     Created_by = "samka"
     Team       = "devops"
@@ -46,6 +46,7 @@ locals {
 
 module "ec2_instance" {
   source           = "../../modules/ec2_instance"
+  count            = local.instance_count
   ami_id           = local.ec2_instance_ami
   instance_type    = local.ec2_instance_type
   security_groups  = local.security_groups
@@ -54,8 +55,30 @@ module "ec2_instance" {
   root_volume_size = local.root_volume_size
   tags = merge(local.tags, {
     Name = format("%s-%s-%s", local.tags["Env"], local.tags["Team"], local.tags["Project"])
-  }
-)
+    }
+  )
 
 }
+
+
+output "instance_ids" {
+  value       = [for instance in module.ec2_instance : instance.instance_id]
+  description = "The IDs of the EC2 instances"
+}
+
+output "public_ips" {
+  value       = [for instance in module.ec2_instance : instance.public_ip]
+  description = "The public IP addresses of the EC2 instances"
+}
+
+output "private_ips" {
+  value       = [for instance in module.ec2_instance : instance.private_ip]
+  description = "The private IP addresses of the EC2 instances"
+}
+
+output "availability_zones" {
+  value       = [for instance in module.ec2_instance : instance.availability_zone]
+  description = "The availability zones of the EC2 instances"
+}
+
 
