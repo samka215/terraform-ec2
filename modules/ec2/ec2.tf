@@ -7,6 +7,7 @@ resource "aws_instance" "ec2" {
   user_data                   = var.user_data
   tenancy                     = var.tenancy
   associate_public_ip_address = var.associate_public_ip_address
+  
   tags = merge(var.tags, {
     Name = "${var.tags["Project"]}-ec2"
     }
