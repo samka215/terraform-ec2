@@ -55,7 +55,7 @@ sudo ./get_helm.sh
 
 
 module "ec2_instance" {
-  source                      = "../../modules/ec2"
+  source                      = "../../../modules/ec2"
   aws_region                  = local.aws_region
   instance_type               = local.instance_type
   key_name                    = local.key_name
@@ -70,6 +70,8 @@ module "ec2_instance" {
   encrypted                   = local.encrypted
   tags                        = local.tags
 }
+
+
 
 output "public_ip" {
   value = module.ec2_instance.public_ip

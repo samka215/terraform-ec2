@@ -13,11 +13,3 @@ data "aws_ami" "ubuntu" {
 
   owners = ["099720109477"] # Canonical
 }
-
-
-# data "aws_security_group" "samka_sg_info" {
-#   filter {
-#     name   = "tag:Name"
-#     values = ["Anaconda-sg"]
-#   }
-# }
