@@ -1,18 +1,9 @@
-provider "aws" {
-  alias  = "region1"
-  region = "us-east-1"
-}
-
-provider "aws" {
-  alias  = "region2"
-  region = "us-east-2"
-}
-
 
 resource "aws_s3_bucket" "destination" {
-  provider = aws.region2
-  bucket   = format("%s-%s-%s-destination", var.tags["teams"], var.tags["environment"], var.tags["project"])
-  tags     = var.tags
+  provider      = aws.region2
+  bucket        = format("%s-%s-%s-destination", var.tags["teams"], var.tags["environment"], var.tags["project"])
+  force_destroy = var.force_destroy # set to True in the DEv or Test Evironment
+  tags          = var.tags
 }
 
 resource "aws_s3_bucket_versioning" "destination" {
@@ -24,9 +15,10 @@ resource "aws_s3_bucket_versioning" "destination" {
 }
 
 resource "aws_s3_bucket" "source" {
-  provider = aws.region1
-  bucket   = format("%s-%s-%s-source", var.tags["teams"], var.tags["environment"], var.tags["project"])
-  tags     = var.tags
+  provider      = aws.region1
+  bucket        = format("%s-%s-%s-source", var.tags["teams"], var.tags["environment"], var.tags["project"])
+  force_destroy = var.force_destroy # set to True in the DEv or Test Evironment
+  tags          = var.tags
 
 }
 
@@ -57,12 +49,7 @@ resource "aws_s3_bucket_replication_configuration" "replication" {
   bucket = aws_s3_bucket.source.id
 
   rule {
-    id = "freplicate-objects"
-
-    # filter {
-    #   prefix = "foo"
-    # }
-
+    id     = "freplicate-objects"
     status = "Enabled"
 
     destination {
